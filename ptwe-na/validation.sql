@@ -1,0 +1,82 @@
+select 
+ P.FAMILY3_CODE 
+ ,P.FAMILY3_NAME
+
+ ,CASE 
+		    WHEN P.FAMILY3_CODE = 'E09' AND CHARINDEX('Plastic', P.CATEGORY2_NAME, 1) > 0 THEN 'Ecoflo Plastic'
+		    WHEN P.FAMILY3_CODE = 'E09' AND CHARINDEX('Fiberglass', P.CATEGORY2_NAME, 1) > 0 THEN 'Ecoflo Fiberglass'
+		    WHEN P.FAMILY3_CODE = 'E09' AND CHARINDEX('Concrete', P.CATEGORY2_NAME, 1) > 0 THEN 'Ecoflo Concrete'
+		    WHEN P.FAMILY3_CODE = 'E18' AND P.TYPE1_CODE = 'E07' THEN '' -- 622776 2023-05-02
+
+		    -- Fosses septique béton
+		    WHEN PRODUCT_INTERNAL_CODE IN ('778952', '778957', '778960', '778963') THEN 'Fosses septiques en béton avec couvercles en PVC'
+		    WHEN PRODUCT_INTERNAL_CODE IN ('778965', '778966', '778967') THEN 'Fosses septiques en béton avec couvercles en béton'
+		    WHEN PRODUCT_INTERNAL_CODE IN ('780184', '780186') THEN 'Fosses de rétention en béton avec couvercles en PVC'
+		    WHEN PRODUCT_INTERNAL_CODE IN ('780188', '780189') THEN 'Fosses de rétention en béton avec couvercles en béton'
+
+		    ELSE P.FAMILY3_NAME
+		END AS FAMILY3_NAME_
+, P.FAMILY2_CODE
+,P.FAMILY2_NAME
+
+,CASE 
+		    
+		    WHEN P.FAMILY1_CODE = 'R01' THEN 'Rain Water' -- HAJO 2021-03-22
+		    WHEN P.FAMILY3_CODE = 'E18' AND P.TYPE1_CODE = 'E07' THEN 'Linear Module' -- 622776 2023-05-02
+		    WHEN PRODUCT_INTERNAL_CODE IN ('778952', '778957', '778960', '778963', '778965', '778966', '778967', '780184', '780186', '780188', '780189') THEN 'Fosses septique béton'
+		    ELSE P.FAMILY2_NAME
+		END AS FAMILY2_NAME_
+,P.CATEGORY2_NAME
+     
+     , p.FAMILY1_NAME
+     , P.FAMILY1_CODE
+    	
+	,case WHEN PRODUCT_INTERNAL_CODE IN ('778952', '778957', '778960', '778963', '778965', '778966', '778967', '780184', '780186', '780188', '780189') THEN 'Fosses septique béton'
+    When P.FAMILY3_CODE not in ('E09','E06','E07','E08','E05','E02','E04','E10','E03','E13','E15','E14','E18') Then 'Other' 
+			WHEN P.FAMILY1_CODE='R01' Then 'Rain Water' -- HAJO 2021-03-22
+            
+			Else P.FAMILY2_NAME
+		End as FAMILY2_NAME_ADJUSTED
+		
+      , P.PRODUCT_NAME
+     
+     , P.FAMILY2_SORT
+     , P.MEDIA_NAME
+     , P.DIMENSION_NAME
+    
+     , P.TYPE1_NAME
+     , P.PRODUCT_INTERNAL_CODE
+     , P.TYPE1_CODE
+
+from RDL00002_00002_Datawarehouse.dbo.D_PRODUCTS P
+where 
+	PRODUCT_INTERNAL_CODE IN ('778952', '778957', '778960', '778963', '778965', '778966', '778967', '780184', '780186', '780188', '780189')
+
+    
+select O.PRODUCT_ID,
+       PRODUCT_NAME,
+       PRODUCT_INTERNAL_CODE,
+       FAMILY1_CODE,
+       FAMILY1_NAME,
+       FAMILY2_CODE,
+       FAMILY2_NAME,
+       FAMILY3_CODE,
+       FAMILY3_NAME,
+      UNITS_IND,
+      O.DISPLAY_QTY_IND,
+       TRANSACTION_TYPE_ID
+    from ##orders O JOIN RDL00002_00002_Datawarehouse.dbo.D_PRODUCTS P
+        ON O.PRODUCT_ID = P.PRODUCT_ID
+  where FAMILY3_NAME='Septic Tank'
+	PRODUCT_INTERNAL_CODE IN ('778952', '778957', '778960', '778963', '778965', '778966', '778967', '780184', '780186', '780188', '780189')
+
+
+
+    select PRODUCT_INTERNAL_CODE, FAMILY3_CODE, FAMILY3_NAME, count(FAMILY3_CODE)
+    from RDL00002_00002_Datawarehouse.dbo.D_PRODUCTS P
+    where 
+	PRODUCT_INTERNAL_CODE IN ('778952', '778957', '778960', '778963', '778965', '778966', '778967', '780184', '780186', '780188', '780189')
+
+
+    GROUP BY PRODUCT_INTERNAL_CODE, FAMILY3_CODE, FAMILY3_NAME
+    

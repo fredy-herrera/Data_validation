@@ -1,0 +1,27 @@
+
+flowchart LR
+  %% Définition des styles
+  classDef auth fill:#E3F2FD,stroke:#2196F3,stroke-width:2px,color:#0D47A1;
+  classDef access fill:#E8F5E9,stroke:#4CAF50,stroke-width:2px,color:#1B5E20;
+  classDef dataSec fill:#FFF3E0,stroke:#FB8C00,stroke-width:2px,color:#E65100;
+  classDef detail fill:#F3E5F5,stroke:#9C27B0,stroke-width:1.5px,color:#4A148C;
+
+  A[Authentification Microsoft Entra ID<br/>L’utilisateur peut s’authentifier] --> B[Accès à Fabric<br/>L’utilisateur peut accéder à Microsoft Fabric/Pbi Service ]
+  B --> C[Sécurité des données<br/>L’utilisateur peut effectuer l’action sur une table ou un fichier]
+  
+  subgraph C_details[ Rôles d’espace de travail]
+  direction TB
+    subgraph C_elements[ Autorisations d’éléments <br/> Fabric]
+    direction TB
+      C3[Autorisations granulaires/Modèle sémantique ]
+      C4[Contrôles d’accès aux données OneLake]
+    
+  end
+  end
+  C --> C_details
+  %% Attribution des styles
+  class A auth;
+  class B access;
+  class C dataSec;
+  class C_details dataSec;  
+  class C1,C2,C3,C4 detail;
