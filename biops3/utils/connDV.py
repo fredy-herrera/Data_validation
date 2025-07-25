@@ -4,14 +4,17 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 # Define connection parameters
-server = "NADWDAT1A"
+server = "NADWDATDV1A"
 database = "RDL00001_EnterpriseDataWarehouse"
 driver = "ODBC Driver 17 for SQL Server"
 
-# Create SQLAlchemy engine
-connection_string = (
-    f"mssql+pyodbc://@{server}/{database}?driver={driver}&Trusted_Connection=yes"
-)
+# # Create SQLAlchemy engine
+# connection_string = (
+#     f"mssql+pyodbc://@{server}/{database}?driver={driver}&Trusted_Connection=yes"
+# )
+# engine = create_engine(connection_string)
+
+connection_string = f"mssql+pyodbc://@{server}?driver={driver}&Trusted_Connection=yes"
 engine = create_engine(connection_string)
 
 

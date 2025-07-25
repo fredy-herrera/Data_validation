@@ -60,15 +60,14 @@ params = {
     "State": "ON,QC",
     "User": "TECHNT\\HERF2",
 }
-# Execute the stored procedure and load the result into a DataFrame
+# Execute the stored procedure en PP and load the result into a DataFrame
 dailyOrdersModified = execute_proc(query, params)
+
+
 filtered_dailyOrdersModified = dailyOrdersModified[
     dailyOrdersModified["PRODUCT_INTERNAL_CODE"].astype(str).isin(product_codes)
 ]
 
-
-# Read the Excel file into a DataFrame
-data = dailyOrdersDataset
 
 # Preview the first few rows
 dailyOrdersDataset.head()

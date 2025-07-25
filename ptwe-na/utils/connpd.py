@@ -28,6 +28,20 @@ def execute_query(query):
     with engine.connect() as connection:
         result = pd.read_sql(query, connection)
     return result
+    
+
+def get_conn():
+    # Define connection parameters
+    server = "NADWDAT1A"
+    database = "RDL00002_00002_Datawarehouse"
+    driver = "ODBC Driver 17 for SQL Server"
+
+    # Create SQLAlchemy engine
+    connection_string = (
+        f"mssql+pyodbc://@{server}/{database}?driver={driver}&Trusted_Connection=yes"
+    )
+    conn = create_engine(connection_string)
+    return conn
 
 
 ## otra forma de hacerlo: df = pd.read_sql(query, engine)
@@ -41,3 +55,4 @@ def execute_query(query):
 
 # Display the first few rows
 # Cataloge_BI_OPS.head()
+
