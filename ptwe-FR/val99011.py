@@ -12,4 +12,10 @@ WHERE ROUTINE_TYPE = 'PROCEDURE'
   AND ROUTINE_NAME NOT LIKE '%Test%'
 ORDER BY ROUTINE_NAME;
 """)
+# end try
+
+proced=execute_queryPP("EXEC sp_helptext 'Load_d_Supplier'")
+
+textOuput='salto'.join(proced['Text'].astype(str))
+
 
