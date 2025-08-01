@@ -3,6 +3,37 @@ from utils.connpd import execute_query
 from utils.connpp import execute_queryPP
 
 
+proc_F_PurchaseOrderLine = execute_queryPP("""
+EXEC sp_helptext '[RDL00001_EnterpriseDataWarehouse].[dbo].[Load_F_PurchaseOrderLine]'
+ """)
+
+
+proc_F_PurchaseOrderLine.to_csv('purchase_order_lines.sql', index=False)
+
+import csv
+
+proc_F_PurchaseOrderLine.to_csv(
+    'purchase_order_lines.csv',
+    index=False,
+    quoting=csv.QUOTE_NONE,
+    escapechar='\\'
+)
+
+
+proc_F_PurchaseOrderLine.to_csv( 'purchase_order_lines.csv', index=False,    quoting=3 )
+
+
+with open('proc_F_PurchaseOrderLine.sql', 'w', encoding='utf-8') as f:
+    for _, row in proc_F_PurchaseOrderLine.iterrows():
+        columns = ', '.join(proc_F_PurchaseOrderLine.columns)
+        values = ', '.join(f"'{str(value).replace("'", "''")}'" for value in row)
+        sql = f"INSERT INTO PurchaseOrderLine ({columns}) VALUES ({values});\n"
+        f.write(sql)
+
+
+
+
+
 # open the catalog.xlsx file and read the DataLake sheet
 Cataloge_DataLake = pd.read_excel(
     "catalog.xlsx",
